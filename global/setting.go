@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	ServerSetting    *setting.ServerSettingS
-	DatabaseSettingS *setting.DatabaseSettingS
-	DBEngine         *gorm.DB
+	ServerSetting   *setting.ServerSettingS
+	DatabaseSetting *setting.DatabaseSettingS
+	DBEngine        *gorm.DB
 )
