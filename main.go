@@ -1,11 +1,14 @@
 package main
 
 import (
+	"gopkg.in/natefinch/lumberjack.v2"
+
 	"log"
 	"net/http"
 	"xiaolong_blog/global"
 	"xiaolong_blog/internal/model"
 	"xiaolong_blog/internal/routers"
+	"xiaolong_blog/pkg/logger"
 	"xiaolong_blog/pkg/setting"
 )
 
@@ -18,6 +21,11 @@ func init() {
 	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
+	}
+	err = setupLogger()
+
+	if err != nil {
+		log.Fatalf("init.setupLogger err :%v", err)
 	}
 }
 
@@ -48,6 +56,11 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+
+	err = setting.ReadSection("App", &global.AppSetting)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -57,5 +70,16 @@ func setupDBEngine() error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func setupLogger() error {
+	global.Logger = logger.NewLogger(&lumberjack.Logger{
+		Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:   600,
+		MaxAge:    10,
+		LocalTime: true,
+	}, "", log.LstdFlags).WithCaller(2)
+
 	return nil
 }

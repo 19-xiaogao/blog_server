@@ -51,6 +51,7 @@ type Logger struct {
 
 func NewLogger(w io.Writer, prefix string, flag int) *Logger {
 	l := log.New(w, prefix, flag)
+
 	return &Logger{newLogger: l}
 }
 
