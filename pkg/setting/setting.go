@@ -23,6 +23,17 @@ type DatabaseSettingS struct {
 	MaxIdleConns int
 	MaxOpenConns int
 }
+type AppSettingS struct {
+	DefaultPageSize      int
+	MaxPageSize          int
+	LogSavePath          string
+	LogFileName          string
+	LogFileExt           string
+	UploadSavePath       string
+	UploadServerUrl      string
+	UploadImageMaxSize   int
+	UploadImageAllowExts []string
+}
 
 type Setting struct {
 	vp *viper.Viper
