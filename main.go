@@ -1,14 +1,14 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"xiaolong_blog/internal/routers"
 
 	"log"
-	"net/http"
 	"xiaolong_blog/global"
 	"xiaolong_blog/internal/model"
-	"xiaolong_blog/internal/routers"
-	"xiaolong_blog/pkg/logger"
+	"xiaolong_blog/pkg/Logger"
 	"xiaolong_blog/pkg/setting"
 )
 
@@ -29,16 +29,15 @@ func init() {
 	}
 }
 
+// @title 博客系统
+// @version 1.0
+// @description Go 语言编程之旅：一起用 Go 做项目
+// @termsOfService https://github.com/go-programming-tour-book
 func main() {
+	gin.SetMode(global.ServerSetting.RunMode)
 	router := routers.NewRouter()
-	s := &http.Server{
-		Addr:           ":" + global.ServerSetting.HttpPort,
-		Handler:        router,
-		ReadTimeout:    global.ServerSetting.ReadTimeout,
-		WriteTimeout:   global.ServerSetting.WriteTimeout,
-		MaxHeaderBytes: 1 << 20,
-	}
-	s.ListenAndServe()
+	router.Run(":" + global.ServerSetting.HttpPort)
+
 }
 
 func setupSetting() error {
