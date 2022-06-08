@@ -25,8 +25,33 @@ func (a Article) GetList(c *gin.Context) {
 	})
 
 }
-func (a Article) Delete(c *gin.Context) {
 
+//@Summary 删除文章
+//@Produce  json
+//@Params id path int true "文章的ID"
+//Success 200 {string} string "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/admin/article_delete delete
+func (a Article) Delete(c *gin.Context) {
+	params := service.DeleteArticleRequest{}
+	response := app.NewResponse(c)
+	if err := c.ShouldBind(&params); err != nil {
+		global.Logger.Errorf("app.BindAndValid errs:%v", err)
+		response.ToErrorResponse(errcode.InvalidParams)
+		return
+	}
+	svc := service.New(c.Request.Context())
+	err := svc.DeleteArticle(&params)
+	if err != nil {
+		global.Logger.Errorf("svc.Create err :%v", err)
+		response.ToErrorResponse(errcode.ErrorCreateArticleFail)
+		return
+	}
+	response.ToResponse(gin.H{
+		"code": 200,
+		"msg":  "删除成功",
+	})
 }
 func (a Article) Update(c *gin.Context) {
 

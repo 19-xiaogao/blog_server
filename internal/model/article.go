@@ -35,7 +35,7 @@ func (a Article) Update(db *gorm.DB) error {
 }
 
 func (a Article) Delete(db *gorm.DB) error {
-	return db.Where("id = ?", a.ID).Delete(&a).Error
+	return db.Where("primary_key = ?", a.ID).Delete(&a).Error
 }
 
 func (a Article) AllCount(db *gorm.DB) (int, error) {

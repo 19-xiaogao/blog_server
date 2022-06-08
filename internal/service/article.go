@@ -8,6 +8,14 @@ type CreateArticleRequest struct {
 	CoverUrl string `form:"coverUrl" binding:"required"`
 }
 
+type DeleteArticleRequest struct {
+	ID uint32 `form:"id" binding:"required"`
+}
+
 func (svc *Service) CreateArticle(params *CreateArticleRequest) error {
 	return svc.dao.CreateArticle(params.Title, params.Describe, params.Content, params.CoverUrl, params.MusicUrl)
+}
+
+func (svc *Service) DeleteArticle(params *DeleteArticleRequest) error {
+	return svc.dao.DeleteArticle(params.ID)
 }
