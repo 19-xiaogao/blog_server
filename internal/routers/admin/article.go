@@ -44,7 +44,6 @@ func (a Article) Update(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/admin/article_create [post]
 func (a Article) Create(c *gin.Context) {
-
 	params := service.CreateArticleRequest{}
 	response := app.NewResponse(c)
 	if err := c.ShouldBindJSON(&params); err != nil {
@@ -60,13 +59,8 @@ func (a Article) Create(c *gin.Context) {
 		response.ToErrorResponse(errcode.ErrorCreateArticleFail)
 		return
 	}
-	response.ToResponse(gin.H{})
-	//valid, errs := app.BindAndValid(c, &params)
-	//
-	//if !valid {
-	//	global.Logger.Errorf("app.BindAndValid errs:%v", errs)
-	//	response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
-	//	return
-	//}
-
+	response.ToResponse(gin.H{
+		"code": 200,
+		"msg":  "创建成功",
+	})
 }
