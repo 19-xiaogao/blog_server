@@ -4,16 +4,16 @@ import "github.com/jinzhu/gorm"
 
 type Article struct {
 	ID           uint32 `gorm:"primary_key" json:"id"`
-	Title        string
-	Describe     string
-	CreateTime   string `json:"create_time"`
-	Content      string
-	CommentId    string `json:"comment_id"`
-	MusicUrl     string `json:"music_url"`
-	CoverUrl     string `json:"cover_url"`
-	LickCount    uint32 `json:"lick_count"`
-	LookCount    uint32 `json:"look_count"`
-	CommentCount uint32 `json:"comment_count"`
+	Title        string `gorm:"title"`
+	Describe     string `gorm:"describe"`
+	CreateTime   string `gorm:"create_time"`
+	Content      string `gorm:"content"`
+	CommentId    int    `gorm:"comment_id"`
+	MusicUrl     string `gorm:"music_url"`
+	CoverUrl     string `gorm:"cover_url"`
+	LickCount    uint32 `gorm:"lick_count"`
+	LookCount    uint32 `gorm:"look_count"`
+	CommentCount uint32 `gorm:"comment_count"`
 }
 
 func (a Article) TableName() string {
@@ -25,7 +25,13 @@ func (a Article) Create(db *gorm.DB) error {
 }
 
 func (a Article) Update(db *gorm.DB) error {
-	return db.Model(&Article{}).Where("id = ?", a.ID).Delete(&a).Error
+	return db.Model(&Article{}).Where("primary_key = ?", a.ID).Updates(map[string]interface{}{
+		"title":    a.Title,
+		"describe": a.Describe,
+		"content":  a.Content,
+		"musicUrl": a.MusicUrl,
+		"coverUrl": a.CoverUrl,
+	}).Error
 }
 
 func (a Article) Delete(db *gorm.DB) error {

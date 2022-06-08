@@ -14,12 +14,13 @@ func NewRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	adminApi := r.Group("/api/admin")
-	blogApi := admin.NewBlog()
+	atricleApi := admin.NewArticle()
 	{
-		adminApi.GET("/blog_list", blogApi.GetList)
-		adminApi.GET("/blog_get", blogApi.Get)
-		adminApi.POST("/blog_delete", blogApi.Delete)
-		adminApi.POST("/blog_update", blogApi.Update)
+		adminApi.GET("/article_list", atricleApi.GetList)
+		adminApi.GET("/article_get", atricleApi.Get)
+		adminApi.POST("/article_delete", atricleApi.Delete)
+		adminApi.POST("/article_update", atricleApi.Update)
+		adminApi.POST("/article_create", atricleApi.Create)
 	}
 
 	return r
