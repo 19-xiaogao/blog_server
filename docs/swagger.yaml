@@ -1,3 +1,15 @@
+definitions:
+  errcode.Error:
+    properties:
+      code:
+        type: integer
+      details:
+        items:
+          type: string
+        type: array
+      msg:
+        type: string
+    type: object
 info:
   contact: {}
   description: Go 语言编程之旅：一起用 Go 做项目
@@ -5,5 +17,59 @@ info:
   termsOfService: https://github.com/go-programming-tour-book
   title: 博客系统
   version: "1.0"
-paths: {}
+paths:
+  /api/admin/article_create:
+    post:
+      parameters:
+      - description: 文章名称
+        in: body
+        maxLength: 50
+        minLength: 1
+        name: title
+        required: true
+        schema:
+          type: string
+      - description: 文章描述
+        in: body
+        maxLength: 200
+        minLength: 10
+        name: describe
+        required: true
+        schema:
+          type: string
+      - description: 文章内容
+        in: body
+        minLength: 1
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: 文章背景音乐url
+        in: body
+        name: musicUrl
+        required: true
+        schema:
+          type: string
+      - description: 文章封面
+        in: body
+        name: coverUrl
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: string
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 创建文章
 swagger: "2.0"
