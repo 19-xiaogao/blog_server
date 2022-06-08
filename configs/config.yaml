@@ -8,7 +8,7 @@ Database:
   Username: root
   Password: rootroot
   Host: 127.0.0.1:3306
-  DBName: blog_service
+  DBName: blog_service_master
   TablePrefix: blog_
   Charset: utf8
   ParseTime: True
