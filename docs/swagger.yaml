@@ -100,4 +100,18 @@ paths:
           schema:
             $ref: '#/definitions/errcode.Error'
       summary: 删除文章
+  /api/admin/article_update:
+    post:
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 更新文章
 swagger: "2.0"
