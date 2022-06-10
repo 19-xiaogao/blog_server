@@ -18,6 +18,20 @@ info:
   title: 博客系统
   version: "1.0"
 paths:
+  /api/admin/article/:id:
+    get:
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 查询指定文章
   /api/admin/article_create:
     post:
       parameters:
@@ -72,4 +86,18 @@ paths:
           schema:
             $ref: '#/definitions/errcode.Error'
       summary: 创建文章
+  /api/admin/article_delete/:id:
+    delete:
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 删除文章
 swagger: "2.0"

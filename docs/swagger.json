@@ -9,6 +9,28 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/admin/article/:id": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "查询指定文章",
+                "responses": {
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/admin/article_create": {
             "post": {
                 "produces": [
@@ -74,6 +96,28 @@
                             "type": "string"
                         }
                     },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/article_delete/:id": {
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "删除文章",
+                "responses": {
                     "400": {
                         "description": "请求错误",
                         "schema": {

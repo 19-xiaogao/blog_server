@@ -25,6 +25,13 @@ func (a Article) GetList(c *gin.Context) {
 	})
 }
 
+//@Summary 查询指定文章
+//@Produce  json
+//@Params id path int true "文章的ID"
+//Success 200 {string} string "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/admin/article/:id [get]
 func (a Article) Query(c *gin.Context) {
 	params := service.QueryArticleRequest{}
 	response := app.NewResponse(c)
@@ -46,7 +53,7 @@ func (a Article) Query(c *gin.Context) {
 //Success 200 {string} string "成功"
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
-// @Router /api/admin/article_delete delete
+// @Router /api/admin/article_delete/:id [delete]
 func (a Article) Delete(c *gin.Context) {
 	params := service.DeleteArticleRequest{}
 	response := app.NewResponse(c)
