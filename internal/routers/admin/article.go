@@ -23,7 +23,21 @@ func (a Article) GetList(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"code": "200",
 	})
+}
 
+func (a Article) Query(c *gin.Context) {
+	params := service.QueryArticleRequest{}
+	response := app.NewResponse(c)
+
+	if err := c.ShouldBindUri(&params); err != nil {
+		global.Logger.Errorf("app.BindAndValid errs:%v", err)
+		response.ToErrorResponse(errcode.InvalidParams)
+		return
+	}
+	svc := service.New(c.Request.Context())
+	data := svc.QueryArticle(&params)
+
+	response.ToResponse(data)
 }
 
 //@Summary 删除文章
@@ -36,7 +50,7 @@ func (a Article) GetList(c *gin.Context) {
 func (a Article) Delete(c *gin.Context) {
 	params := service.DeleteArticleRequest{}
 	response := app.NewResponse(c)
-	if err := c.ShouldBind(&params); err != nil {
+	if err := c.ShouldBindUri(&params); err != nil {
 		global.Logger.Errorf("app.BindAndValid errs:%v", err)
 		response.ToErrorResponse(errcode.InvalidParams)
 		return

@@ -1,19 +1,21 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type Article struct {
-	ID           uint32 `gorm:"primary_key" json:"id"`
-	Title        string `gorm:"title"`
-	Describe     string `gorm:"describe"`
-	CreateTime   string `gorm:"create_time"`
-	Content      string `gorm:"content"`
-	CommentId    int    `gorm:"comment_id"`
-	MusicUrl     string `gorm:"music_url"`
-	CoverUrl     string `gorm:"cover_url"`
-	LickCount    uint32 `gorm:"lick_count"`
-	LookCount    uint32 `gorm:"look_count"`
-	CommentCount uint32 `gorm:"comment_count"`
+	ID           int    `gorm:"id" json:"id"`
+	Title        string `gorm:"title" json:"title"`
+	Describe     string `gorm:"describe" json:"describe"`
+	CreateTime   string `gorm:"create_time" json:"create_time"`
+	Content      string `gorm:"content" json:"content"`
+	CommentId    int    `gorm:"comment_id" json:"comment_id"`
+	MusicUrl     string `gorm:"music_url" json:"music_url"`
+	CoverUrl     string `gorm:"cover_url" json:"cover_url"`
+	LickCount    uint32 `gorm:"lick_count" json:"lick_count"`
+	LookCount    uint32 `gorm:"look_count" json:"look_count"`
+	CommentCount uint32 `gorm:"comment_count" json:"comment_count"`
 }
 
 func (a Article) TableName() string {
@@ -35,7 +37,15 @@ func (a Article) Update(db *gorm.DB) error {
 }
 
 func (a Article) Delete(db *gorm.DB) error {
-	return db.Where("primary_key = ?", a.ID).Delete(&a).Error
+	return db.Where(&Article{ID: a.ID}).Delete(&Article{}).Error
+}
+func (a Article) Query(db *gorm.DB) interface{} {
+	data := db.Where(&Article{ID: a.ID}).First(&Article{})
+
+	if data.Error != nil {
+		return nil
+	}
+	return data.Value
 }
 
 func (a Article) AllCount(db *gorm.DB) (int, error) {

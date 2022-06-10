@@ -9,7 +9,11 @@ type CreateArticleRequest struct {
 }
 
 type DeleteArticleRequest struct {
-	ID uint32 `form:"id" binding:"required"`
+	ID int `form:"id" binding:"required" uri:"id"`
+}
+
+type QueryArticleRequest struct {
+	ID int `form:"id" binding:"required" uri:"id"`
 }
 
 func (svc *Service) CreateArticle(params *CreateArticleRequest) error {
@@ -18,4 +22,8 @@ func (svc *Service) CreateArticle(params *CreateArticleRequest) error {
 
 func (svc *Service) DeleteArticle(params *DeleteArticleRequest) error {
 	return svc.dao.DeleteArticle(params.ID)
+}
+
+func (svc *Service) QueryArticle(params *QueryArticleRequest) interface{} {
+	return svc.dao.QueryArticle(params.ID)
 }

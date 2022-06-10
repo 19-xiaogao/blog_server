@@ -13,13 +13,17 @@ func (d *Dao) CountArticle() (int, error) {
 }
 
 // 更新指定文章
-func (d *Dao) UpdateArticle(id uint32, title string, describe string, content string, musicUrl string, coverUrl string) error {
+func (d *Dao) UpdateArticle(id int, title string, describe string, content string, musicUrl string, coverUrl string) error {
 	article := model.Article{ID: id, Title: title, Describe: describe, CoverUrl: coverUrl, Content: content, MusicUrl: musicUrl}
 	return article.Update(d.engine)
 }
+func (d *Dao) QueryArticle(id int) interface{} {
+	article := model.Article{ID: id}
+	return article.Query(d.engine)
+}
 
 // 删除指定文章...
-func (d *Dao) DeleteArticle(id uint32) error {
+func (d *Dao) DeleteArticle(id int) error {
 	article := model.Article{ID: id}
 
 	return article.Delete(d.engine)
