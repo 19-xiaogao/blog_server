@@ -17,6 +17,8 @@ func (d *Dao) UpdateArticle(id int, title string, describe string, content strin
 	article := model.Article{ID: id, Title: title, Describe: describe, CoverUrl: coverUrl, Content: content, MusicUrl: musicUrl}
 	return article.Update(d.engine)
 }
+
+// 查询指定文章
 func (d *Dao) QueryArticle(id int) interface{} {
 	article := model.Article{ID: id}
 	return article.Query(d.engine)
@@ -44,4 +46,10 @@ func (d *Dao) CreateArticle(title string, describe string, content string, music
 		CommentCount: 0,
 	}
 	return article.Create(d.engine)
+}
+
+// 获取文章列表
+func (d *Dao) ListArticle(page int, pageSize int) ([]*model.Article, error) {
+	article := model.Article{}
+	return article.List(d.engine, page, pageSize)
 }

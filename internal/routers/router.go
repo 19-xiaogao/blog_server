@@ -17,7 +17,7 @@ func NewRouter() *gin.Engine {
 	atricleApi := admin.NewArticle()
 	{
 		adminApi.GET("/article/:id", atricleApi.Query)
-		adminApi.GET("/article_get", atricleApi.Get)
+		adminApi.GET("/article_list", atricleApi.GetList)
 		adminApi.DELETE("/article_delete/:id", atricleApi.Delete)
 		adminApi.POST("/article_update", atricleApi.Update)
 		adminApi.POST("/article_create", atricleApi.Create)

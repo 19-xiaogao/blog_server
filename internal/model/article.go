@@ -26,6 +26,18 @@ func (a Article) Create(db *gorm.DB) error {
 	return db.Create(&a).Error
 }
 
+func (a Article) List(db *gorm.DB, pageOffset, pageSize int) ([]*Article, error) {
+	var articles []*Article
+	if pageOffset == 1 || pageOffset == 0 {
+		pageOffset = 0
+	}
+	data := db.Offset(pageOffset).Limit(pageSize).Find(&articles)
+	if data.Error != nil {
+		return articles, data.Error
+	}
+	return articles, nil
+}
+
 func (a Article) Update(db *gorm.DB) error {
 	return db.Model(&Article{}).Where(&Article{ID: a.ID}).Updates(map[string]interface{}{
 		"title":     a.Title,
