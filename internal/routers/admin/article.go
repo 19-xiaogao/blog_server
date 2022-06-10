@@ -15,14 +15,36 @@ func NewArticle() Article {
 	return Article{}
 }
 
-func (a Article) Get(c *gin.Context) {
-
-}
-
+// @Summary 获取多个文章列表
+// @Produce json
+// @Param page query int false "页码"
+// @Param page_size query int false "每页数量"
+// @Success 200 {object} model.Tag "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/admin/article_list [get]
 func (a Article) GetList(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"code": "200",
-	})
+	response := app.NewResponse(c)
+	if err := c.ShouldBindUri(&app.Pager{}); err != nil {
+		global.Logger.Errorf("app.ShouldBindUri err%v", err)
+		response.ToErrorResponse(errcode.InvalidParams)
+		return
+	}
+	svc := service.New(c.Request.Context())
+	pager := app.Pager{Page: app.GetPage(c), PageSize: app.GetPageSize(c)}
+	total, err := svc.CountArticle()
+	if err != nil {
+		global.Logger.Errorf("svc.CountArticle err: %v", err)
+		response.ToErrorResponse(errcode.ErrorCountArticleFail)
+		return
+	}
+	articleList, err := svc.ListArticle(&pager)
+	if err != nil {
+		global.Logger.Errorf("svc.GetTagList err: %v", err)
+		response.ToErrorResponse(errcode.ErrorGetArticleListFail)
+		return
+	}
+	response.ToResponseList(articleList, total)
 }
 
 //@Summary 查询指定文章
