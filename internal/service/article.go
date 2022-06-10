@@ -18,7 +18,7 @@ type QueryArticleRequest struct {
 
 type UpdateArticleRequest struct {
 	CreateArticleRequest
-	ID int `form:"id" binding:"required" uri:"id"`
+	ID int `form:"id" binding:"required"`
 }
 
 func (svc *Service) CreateArticle(params *CreateArticleRequest) error {

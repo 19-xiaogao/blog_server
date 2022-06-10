@@ -74,6 +74,19 @@ func (a Article) Delete(c *gin.Context) {
 		"msg":  "删除成功",
 	})
 }
+
+//@Summary 更新文章
+//@Produce  json
+//@Params id body int true "文章的ID"
+//@Params title body string true "文章的标题"
+//@Params describe body string true "文章的描述"
+//@Params content body string true "文章的内容"
+//@Params musicUrl body int string "文章的背景音乐url"
+//@Params coverUrl body int string "文章的封面的url"
+//Success 200 {string} string "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/admin/article_update [post]
 func (a Article) Update(c *gin.Context) {
 	params := service.UpdateArticleRequest{}
 	response := app.NewResponse(c)
