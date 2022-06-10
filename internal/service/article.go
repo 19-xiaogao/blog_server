@@ -16,6 +16,11 @@ type QueryArticleRequest struct {
 	ID int `form:"id" binding:"required" uri:"id"`
 }
 
+type UpdateArticleRequest struct {
+	CreateArticleRequest
+	ID int `form:"id" binding:"required" uri:"id"`
+}
+
 func (svc *Service) CreateArticle(params *CreateArticleRequest) error {
 	return svc.dao.CreateArticle(params.Title, params.Describe, params.Content, params.CoverUrl, params.MusicUrl)
 }
@@ -26,4 +31,7 @@ func (svc *Service) DeleteArticle(params *DeleteArticleRequest) error {
 
 func (svc *Service) QueryArticle(params *QueryArticleRequest) interface{} {
 	return svc.dao.QueryArticle(params.ID)
+}
+func (svc *Service) UpdateArticle(params *UpdateArticleRequest) error {
+	return svc.dao.UpdateArticle(params.ID, params.Title, params.Describe, params.Content, params.CoverUrl, params.MusicUrl)
 }

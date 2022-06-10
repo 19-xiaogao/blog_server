@@ -27,12 +27,12 @@ func (a Article) Create(db *gorm.DB) error {
 }
 
 func (a Article) Update(db *gorm.DB) error {
-	return db.Model(&Article{}).Where("primary_key = ?", a.ID).Updates(map[string]interface{}{
-		"title":    a.Title,
-		"describe": a.Describe,
-		"content":  a.Content,
-		"musicUrl": a.MusicUrl,
-		"coverUrl": a.CoverUrl,
+	return db.Model(&Article{}).Where(&Article{ID: a.ID}).Updates(map[string]interface{}{
+		"title":     a.Title,
+		"describe":  a.Describe,
+		"content":   a.Content,
+		"music_url": a.MusicUrl,
+		"cover_url": a.CoverUrl,
 	}).Error
 }
 

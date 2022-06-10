@@ -75,7 +75,25 @@ func (a Article) Delete(c *gin.Context) {
 	})
 }
 func (a Article) Update(c *gin.Context) {
+	params := service.UpdateArticleRequest{}
+	response := app.NewResponse(c)
+	if err := c.ShouldBindJSON(&params); err != nil {
+		global.Logger.Errorf("app.BindAndValid errs:%v", err)
+		response.ToErrorResponse(errcode.InvalidParams)
+		return
+	}
+	svc := service.New(c.Request.Context())
 
+	err := svc.UpdateArticle(&params)
+	if err != nil {
+		global.Logger.Errorf("svc.Create err :%v", err)
+		response.ToErrorResponse(errcode.ErrorCreateArticleFail)
+		return
+	}
+	response.ToResponse(gin.H{
+		"code": 200,
+		"msg":  "更新成功",
+	})
 }
 
 // @Summary 创建文章
