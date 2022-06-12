@@ -20,3 +20,9 @@ App:
   LogSavePath: storage/logs
   LogFileName: app
   LogFileExt: .log
+  UploadSavePath: storage/uploads
+  UploadServerUrl: http://127.0.0.1:8081/static
+  UploadImageAllowExts:
+    - .jpg
+    - .jpeg
+    - .png
