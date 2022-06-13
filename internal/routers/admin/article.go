@@ -15,11 +15,10 @@ func NewArticle() Article {
 	return Article{}
 }
 
-// @Summary 获取多个文章列表
+// GetList @Summary 获取多个文章列表
 // @Produce json
 // @Param page query int false "页码"
 // @Param page_size query int false "每页数量"
-// @Success 200 {object} model.Tag "成功"
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/admin/article_list [get]
@@ -47,7 +46,7 @@ func (a Article) GetList(c *gin.Context) {
 	response.ToResponseList(articleList, total)
 }
 
-//@Summary 查询指定文章
+// Query @Summary 查询指定文章
 //@Produce  json
 //@Params id path int true "文章的ID"
 //Success 200 {string} string "成功"
@@ -69,7 +68,7 @@ func (a Article) Query(c *gin.Context) {
 	response.ToResponse(data)
 }
 
-//@Summary 删除文章
+// Delete @Summary 删除文章
 //@Produce  json
 //@Params id path int true "文章的ID"
 //Success 200 {string} string "成功"
@@ -97,7 +96,7 @@ func (a Article) Delete(c *gin.Context) {
 	})
 }
 
-//@Summary 更新文章
+// Update @Summary 更新文章
 //@Produce  json
 //@Params id body int true "文章的ID"
 //@Params title body string true "文章的标题"
@@ -131,7 +130,7 @@ func (a Article) Update(c *gin.Context) {
 	})
 }
 
-// @Summary 创建文章
+// Create @Summary 创建文章
 // @Produce  json
 // @Param title body string true "文章名称" minlength(1) maxlength(50)
 // @Param describe body string true "文章描述" minlength(10) maxlength(200)

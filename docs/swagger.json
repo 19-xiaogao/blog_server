@@ -14,7 +14,6 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "查询指定文章",
                 "responses": {
                     "400": {
                         "description": "请求错误",
@@ -36,7 +35,6 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "创建文章",
                 "parameters": [
                     {
                         "maxLength": 50,
@@ -116,7 +114,41 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "删除文章",
+                "responses": {
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/article_list": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "400": {
                         "description": "请求错误",
@@ -138,8 +170,34 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "更新文章",
                 "responses": {
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/upload/file": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     "400": {
                         "description": "请求错误",
                         "schema": {

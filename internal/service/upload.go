@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/pkg/errors"
+	"errors"
 	"mime/multipart"
 	"os"
 	"xiaolong_blog/global"
