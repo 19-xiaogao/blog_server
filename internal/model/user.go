@@ -1,5 +1,7 @@
 package model
 
+import "github.com/jinzhu/gorm"
+
 type User struct {
 	ID                 int    `gorm:"id" json:"id"`
 	UserName           string `gorm:"user_name" json:"user_name"`
@@ -15,4 +17,12 @@ type User struct {
 
 func (u *User) TableName() string {
 	return "blog_user"
+}
+
+func (u User) Add(db *gorm.DB) error {
+	return db.Create(&u).Error
+}
+
+func (u User) Delete(db *gorm.DB) error {
+	return db.Where(&User{ID: u.ID}).Delete(&User{}).Error
 }
