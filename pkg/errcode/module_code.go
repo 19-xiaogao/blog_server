@@ -7,4 +7,5 @@ var (
 	ErrorDeleteArticleFail  = NewError(20010004, "删除文章失败")
 	ErrorCountArticleFail   = NewError(20010005, "统计文章失败")
 	ErrorUploadFileFail     = NewError(20030001, "上传文件失败")
+	ErrorLoginTokenFileFail = NewError(20030002, "token生成失败")
 )
