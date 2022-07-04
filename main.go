@@ -69,6 +69,8 @@ func setupDBEngine() error {
 	if err != nil {
 		return err
 	}
+	//init all table
+	global.DBEngine.AutoMigrate(&model.User{}, &model.Article{})
 	return nil
 }
 
