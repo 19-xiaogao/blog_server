@@ -13,6 +13,7 @@ type User struct {
 	CreateTime         string `gorm:"create_time" json:"create_time"`
 	Avatar             string `gorm:"avatar" json:"avatar"`
 	BackgroundMusicUrl string `gorm:"background_music_url" json:"background_music_url"`
+	Password           string `gorm:"password" json:"password"`
 }
 
 func (u *User) TableName() string {
@@ -25,4 +26,8 @@ func (u User) Add(db *gorm.DB) error {
 
 func (u User) Delete(db *gorm.DB) error {
 	return db.Where(&User{ID: u.ID}).Delete(&User{}).Error
+}
+
+func (u User) QueryUserExit(db *gorm.DB) error {
+	return db.Where(&User{UserName: u.UserName, Password: u.Password}).Error
 }
