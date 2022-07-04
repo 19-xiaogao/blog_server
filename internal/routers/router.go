@@ -22,6 +22,7 @@ func NewRouter() *gin.Engine {
 	login := admin.NewLogin()
 	{
 		adminApi.POST("/login", login.Login)
+		adminApi.POST("/register", login.Register)
 		adminApi.GET("/article/:id", articleApi.Query)
 		adminApi.GET("/article_list", articleApi.GetList)
 		adminApi.DELETE("/article_delete/:id", articleApi.Delete)

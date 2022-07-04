@@ -46,3 +46,23 @@ func (u Login) Login(c *gin.Context) {
 		"token": token,
 	})
 }
+
+func (u Login) Register(c *gin.Context) {
+	response := app.NewResponse(c)
+	params := service.UserLoginRegisterRequest{}
+	if err := c.ShouldBindJSON(&params); err != nil {
+		global.Logger.Errorf("app.BindAndValid errs:%v", err)
+		response.ToErrorResponse(errcode.InvalidParams)
+		return
+	}
+	svc := service.New(c)
+	params.Password = auth.SHA256Secret(params.Password)
+	err := svc.RegisterUser(&params)
+	if err != nil {
+		response.ToErrorResponse(errcode.ErrorLoginNotExitUserFail)
+		return
+	}
+	response.ToResponse(gin.H{
+		"msg": "注册成功",
+	})
+}

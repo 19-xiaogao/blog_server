@@ -31,3 +31,7 @@ func (u User) Delete(db *gorm.DB) error {
 func (u User) QueryUserExit(db *gorm.DB) error {
 	return db.Where(&User{UserName: u.UserName, Password: u.Password}).Error
 }
+
+func (u User) RegisterUser(db *gorm.DB) error {
+	return db.Create(&User{UserName: u.UserName, Password: u.Password}).Error
+}
