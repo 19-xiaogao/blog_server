@@ -3,6 +3,7 @@ package admin
 import (
 	"github.com/gin-gonic/gin"
 	"xiaolong_blog/global"
+	"xiaolong_blog/internal/service"
 	"xiaolong_blog/pkg/app"
 	"xiaolong_blog/pkg/auth"
 	"xiaolong_blog/pkg/errcode"
@@ -22,18 +23,24 @@ func NewLogin() Login {
 
 func (u Login) Login(c *gin.Context) {
 	response := app.NewResponse(c)
-	params := UserLogin{}
+	params := service.UserLoginRequest{}
 	if err := c.ShouldBindJSON(&params); err != nil {
 		global.Logger.Errorf("app.BindAndValid errs:%v", err)
 		response.ToErrorResponse(errcode.InvalidParams)
 		return
 	}
-
-	// 假如它用户密码正确...暂时没有写用户表...
+	svc := service.New(c)
+	params.Password = auth.SHA256Secret(params.Password)
+	err := svc.QueryUserExit(&params)
+	if err == nil {
+		response.ToErrorResponse(errcode.ErrorLoginNotExitUserFail)
+		return
+	}
 	token, err := auth.CreateJwtToken(params.UserName, params.Password)
 	if err != nil {
 		global.Logger.Errorf("login err: %v", err)
 		response.ToErrorResponse(errcode.ErrorLoginTokenFileFail.WithDetails(err.Error()))
+		return
 	}
 	response.ToResponse(gin.H{
 		"token": token,

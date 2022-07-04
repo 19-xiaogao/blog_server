@@ -15,17 +15,18 @@ func NewRouter() *gin.Engine {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
+
 	adminApi := r.Group("/api/admin")
-	atricleApi := admin.NewArticle()
+	articleApi := admin.NewArticle()
 	upload := admin.NewUpload()
 	login := admin.NewLogin()
 	{
 		adminApi.POST("/login", login.Login)
-		adminApi.GET("/article/:id", atricleApi.Query)
-		adminApi.GET("/article_list", atricleApi.GetList)
-		adminApi.DELETE("/article_delete/:id", atricleApi.Delete)
-		adminApi.POST("/article_update", atricleApi.Update)
-		adminApi.POST("/article_create", atricleApi.Create)
+		adminApi.GET("/article/:id", articleApi.Query)
+		adminApi.GET("/article_list", articleApi.GetList)
+		adminApi.DELETE("/article_delete/:id", articleApi.Delete)
+		adminApi.POST("/article_update", articleApi.Update)
+		adminApi.POST("/article_create", articleApi.Create)
 		adminApi.POST("/upload/file", upload.UploadFile)
 
 	}
