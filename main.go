@@ -60,6 +60,11 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+	err = setting.ReadSection("Email", &global.EmailSetting)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -70,7 +75,7 @@ func setupDBEngine() error {
 		return err
 	}
 	//init all table
-	global.DBEngine.AutoMigrate(&model.User{}, &model.Article{})
+	global.DBEngine.AutoMigrate(&model.User{}, &model.Article{}, &model.Register{})
 	return nil
 }
 

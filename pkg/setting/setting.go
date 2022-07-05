@@ -34,6 +34,12 @@ type AppSettingS struct {
 	UploadImageMaxSize   int
 	UploadImageAllowExts []string
 }
+type EmailSettingS struct {
+	Host     string
+	Port     int
+	UserName string
+	Password string
+}
 
 type Setting struct {
 	vp *viper.Viper

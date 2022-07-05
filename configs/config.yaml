@@ -26,3 +26,8 @@ App:
     - .jpg
     - .jpeg
     - .png
+Email:
+  Host: smtp.163.com
+  Port: 25
+  UserName: longjiuwei999@163.com
+  Password: BSBYXEEUKQIMJLFX
