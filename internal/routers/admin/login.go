@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"time"
 	"xiaolong_blog/global"
@@ -58,20 +59,26 @@ func (u Login) Register(c *gin.Context) {
 		return
 	}
 
-	randomNumber := util.CreateSixNumber()
-	if err := auth.SendEmail(params.Email, randomNumber); err != nil {
-		response.ToErrorResponse(errcode.ErrorRegisterSendEmailFail.WithDetails(err.Error()))
+	// 验证邮箱
+	svc := service.New(c)
+	data, err := svc.VerifyEmail(params.Email, params.AuthCode)
+	fmt.Println(data.IsEmpty())
+	fmt.Println(data.VerifyCode)
+	fmt.Println(params.AuthCode)
+	fmt.Println(time.Now().Unix() * 1000)
+	fmt.Println(data.ExpireTime)
+	if data.IsEmpty() || data.VerifyCode != params.AuthCode || time.Now().Unix()*1000 < data.ExpireTime {
+		response.ToErrorResponse(errcode.ErrorAuthEmailFail)
 		return
 	}
 
-	// 验证邮箱
-	svc := service.New(c)
 	params.Password = auth.SHA256Secret(params.Password)
-	err := svc.RegisterUser(&params)
+	err = svc.RegisterUser(&params)
 	if err != nil {
 		response.ToErrorResponse(errcode.ErrorLoginNotExitUserFail)
 		return
 	}
+
 	response.ToResponse(gin.H{
 		"msg": "注册成功",
 	})
@@ -89,7 +96,7 @@ func (u Login) SendVerifyEmail(c *gin.Context) {
 	data, _ := svc.QueryEmail(&params)
 
 	if data != nil {
-		if time.Now().Unix()*1000 > data.ExpireTime {
+		if !data.IsEmpty() && time.Now().Unix()*1000 < data.ExpireTime {
 			response.ToResponse(gin.H{
 				"msg": "邮箱已经发送,请查收，过期时间10分钟。",
 			})
@@ -112,6 +119,7 @@ func (u Login) SendVerifyEmail(c *gin.Context) {
 		response.ToErrorResponse(errcode.ErrorRegisterSendEmailFail.WithDetails(err.Error()))
 		return
 	}
+
 	response.ToResponse(gin.H{
 		"msg": "邮件发送成功",
 	})
