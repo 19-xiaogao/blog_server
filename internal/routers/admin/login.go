@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"time"
 	"xiaolong_blog/global"
 	"xiaolong_blog/internal/service"
 	"xiaolong_blog/pkg/app"
@@ -86,11 +86,34 @@ func (u Login) SendVerifyEmail(c *gin.Context) {
 		return
 	}
 	svc := service.New(c)
-	data, err := svc.QueryEmail(&params)
-	fmt.Println(data)
-	fmt.Println(err)
-	if err != nil {
-		fmt.Println(data)
+	data, _ := svc.QueryEmail(&params)
+
+	if data != nil {
+		if time.Now().Unix()*1000 > data.ExpireTime {
+			response.ToResponse(gin.H{
+				"msg": "邮箱已经发送,请查收，过期时间10分钟。",
+			})
+			return
+		}
 	}
+	roundNumber := util.CreateSixNumber()
+
+	err := auth.SendEmail(params.Email, roundNumber)
+	if err != nil {
+		global.Logger.Errorf("app.sendVerifyEmail errs%v", err)
+		response.ToErrorResponse(errcode.ErrorRegisterSendEmailFail.WithDetails(err.Error()))
+		return
+	}
+	expireTime := time.Now().Add(time.Minute*5).Unix() * 1000
+	err = svc.AddVerifyEmail(params.Email, roundNumber, expireTime)
+
+	if err != nil {
+		global.Logger.Errorf("app.sendVerifyEmail errs%v", err)
+		response.ToErrorResponse(errcode.ErrorRegisterSendEmailFail.WithDetails(err.Error()))
+		return
+	}
+	response.ToResponse(gin.H{
+		"msg": "邮件发送成功",
+	})
 
 }

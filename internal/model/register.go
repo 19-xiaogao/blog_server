@@ -6,7 +6,7 @@ type Register struct {
 	ID         int `gorm:"id" json:"id"`
 	Email      string
 	VerifyCode string `gorm:"verify_code"`
-	expireTime int32  `gorm:"expire_time"`
+	ExpireTime int64  `gorm:"expire_time"`
 }
 
 func (r Register) TableName() string {
@@ -14,13 +14,16 @@ func (r Register) TableName() string {
 }
 
 func (r Register) Create(db *gorm.DB) error {
+	db.Where(&Register{Email: r.Email}).Delete(&Article{})
 	return db.Create(&r).Error
 }
 
-func (r Register) Query(db *gorm.DB) (interface{}, error) {
+func (r Register) Query(db *gorm.DB) (*Register, error) {
+	var register = Register{}
 	data := db.Where(&Register{Email: r.Email}).First(&Register{})
 	if data.Error != nil {
 		return nil, data.Error
 	}
-	return data.Value, nil
+
+	return &register, nil
 }

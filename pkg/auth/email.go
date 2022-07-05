@@ -29,7 +29,7 @@ func SendEmail(recipient string, verifyCode string) error {
 
 	d := gomail.NewDialer(global.EmailSetting.Host, global.EmailSetting.Port, global.EmailSetting.UserName, global.EmailSetting.Password)
 	// 关闭SSL协议认证
-	d.TLSConfig = &tls.Config{InsecureSkipVerify: false}
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	err := d.DialAndSend(m)
 	if err != nil {
