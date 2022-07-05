@@ -23,6 +23,7 @@ func NewRouter() *gin.Engine {
 	{
 		adminApi.POST("/login", login.Login)
 		adminApi.POST("/register", login.Register)
+		adminApi.POST("/send_verify_email", login.SendVerifyEmail)
 		adminApi.GET("/article/:id", articleApi.Query)
 		adminApi.GET("/article_list", articleApi.GetList)
 		adminApi.DELETE("/article_delete/:id", articleApi.Delete)
