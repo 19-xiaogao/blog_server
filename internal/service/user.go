@@ -8,6 +8,7 @@ type UserLoginRegisterRequest struct {
 	UserName string `json:"user_name"`
 	Password string `json:"password"`
 	AuthCode string `json:"auth_code"`
+	Email    string `json:"email"`
 }
 
 func (svc *Service) QueryUserExit(params *UserLoginRequest) error {
