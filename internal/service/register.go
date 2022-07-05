@@ -13,3 +13,6 @@ func (svc *Service) QueryEmail(params *UserEmailVerifyRequest) (*model.Register,
 func (svc *Service) AddVerifyEmail(email string, verifyCode string, expireTime int64) error {
 	return svc.dao.AddVerifyEmail(email, verifyCode, expireTime)
 }
+func (svc *Service) VerifyEmail(email string, verifyCode string) (*model.Register, error) {
+	return svc.dao.VerifyEmail(email, verifyCode)
+}
