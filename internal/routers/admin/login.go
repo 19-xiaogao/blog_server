@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"time"
 	"xiaolong_blog/global"
@@ -61,15 +60,20 @@ func (u Login) Register(c *gin.Context) {
 
 	// 验证邮箱
 	svc := service.New(c)
+
 	data, err := svc.VerifyEmail(params.Email, params.AuthCode)
-	fmt.Println(data.IsEmpty())
-	fmt.Println(data.VerifyCode)
-	fmt.Println(params.AuthCode)
-	fmt.Println(time.Now().Unix() * 1000)
-	fmt.Println(data.ExpireTime)
-	if data.IsEmpty() || data.VerifyCode != params.AuthCode || time.Now().Unix()*1000 < data.ExpireTime {
+
+	if data.IsEmpty() || data.VerifyCode != params.AuthCode || time.Now().Unix()*1000 > data.ExpireTime {
 		response.ToErrorResponse(errcode.ErrorAuthEmailFail)
 		return
+	}
+
+	UserData, _ := svc.QueryUserNameExit(params.UserName)
+	if UserData != nil {
+		if !UserData.IsEmpty() {
+			response.ToErrorResponse(errcode.ErrorLoginExitUserFail)
+			return
+		}
 	}
 
 	params.Password = auth.SHA256Secret(params.Password)
