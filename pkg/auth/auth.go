@@ -4,8 +4,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 type JWTClaims struct {
@@ -41,6 +42,21 @@ func CreateJwtToken(id string, username string) (string, error) {
 
 	return signedToken, nil
 
+}
+
+func ValidateToken(signedToken string) (*JWTClaims, error) {
+
+	tokenClaims, err := jwt.ParseWithClaims(signedToken, &JWTClaims{}, func(t *jwt.Token) ([]byte, error) {
+		return Secret, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := tokenClaims.Claims.(*JWTClaims); ok && tokenClaims.Valid {
+		return claims, nil
+	}
+	return nil, err
 }
 
 func SHA256Secret(password string) string {
