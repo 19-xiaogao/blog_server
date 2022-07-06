@@ -1,6 +1,9 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+	"reflect"
+)
 
 type User struct {
 	ID                 int    `gorm:"id" json:"id"`
@@ -23,6 +26,9 @@ func (u *User) TableName() string {
 func (u User) Add(db *gorm.DB) error {
 	return db.Create(&u).Error
 }
+func (u User) IsEmpty() bool {
+	return reflect.DeepEqual(u, User{})
+}
 
 func (u User) Delete(db *gorm.DB) error {
 	return db.Where(&User{ID: u.ID}).Delete(&User{}).Error
@@ -30,6 +36,14 @@ func (u User) Delete(db *gorm.DB) error {
 
 func (u User) QueryUserExit(db *gorm.DB) error {
 	return db.Where(&User{UserName: u.UserName, Password: u.Password}).Error
+}
+func (u User) QueryUserNameExit(db *gorm.DB) (*User, error) {
+	user := User{}
+	data := db.Where(&User{UserName: u.UserName}).Find(&user)
+	if data.Error != nil {
+		return nil, data.Error
+	}
+	return &user, nil
 }
 
 func (u User) RegisterUser(db *gorm.DB) error {
