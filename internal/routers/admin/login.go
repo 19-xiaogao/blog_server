@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"github.com/gin-gonic/gin"
 	"time"
 	"xiaolong_blog/global"
 	"xiaolong_blog/internal/service"
@@ -9,6 +8,8 @@ import (
 	"xiaolong_blog/pkg/auth"
 	"xiaolong_blog/pkg/errcode"
 	"xiaolong_blog/pkg/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserLogin struct {
@@ -33,10 +34,17 @@ func (u Login) Login(c *gin.Context) {
 	}
 	svc := service.New(c)
 	params.Password = auth.SHA256Secret(params.Password)
-	err := svc.QueryUserExit(&params)
-	if err == nil {
+	data, err := svc.QueryUserExit(&params)
+	if err != nil {
 		response.ToErrorResponse(errcode.ErrorLoginNotExitUserFail)
+		global.Logger.Errorf("query user Exit errs:%v", err)
 		return
+	}
+	if data != nil {
+		if data.IsEmpty() {
+			response.ToErrorResponse(errcode.ErrorLoginNotExitUserFail)
+			return
+		}
 	}
 	token, err := auth.CreateJwtToken(params.UserName, params.Password)
 	if err != nil {

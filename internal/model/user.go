@@ -1,8 +1,9 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	"reflect"
+
+	"github.com/jinzhu/gorm"
 )
 
 type User struct {
@@ -34,8 +35,13 @@ func (u User) Delete(db *gorm.DB) error {
 	return db.Where(&User{ID: u.ID}).Delete(&User{}).Error
 }
 
-func (u User) QueryUserExit(db *gorm.DB) error {
-	return db.Where(&User{UserName: u.UserName, Password: u.Password}).Error
+func (u User) QueryUserExit(db *gorm.DB) (*User, error) {
+	user := User{}
+	data := db.Where(&User{UserName: u.UserName, Password: u.Password}).Find(&user)
+	if data.Error != nil {
+		return nil, data.Error
+	}
+	return &user, nil
 }
 func (u User) QueryUserNameExit(db *gorm.DB) (*User, error) {
 	user := User{}

@@ -13,7 +13,7 @@ type UserLoginRegisterRequest struct {
 	Email    string `json:"email"`
 }
 
-func (svc *Service) QueryUserExit(params *UserLoginRequest) error {
+func (svc *Service) QueryUserExit(params *UserLoginRequest) (*model.User, error) {
 	return svc.dao.QueryUser(params.UserName, params.Password)
 }
 
