@@ -39,7 +39,7 @@ func (d *Dao) CreateArticle(title string, describe string, content string, music
 		Content:      content,
 		MusicUrl:     musicUrl,
 		CoverUrl:     coverUrl,
-		CreateTime:   strconv.FormatInt(time.Now().Unix(), 10),
+		CreateTime:   strconv.FormatInt(time.Now().Unix()*1000, 10),
 		CommentId:    0,
 		LickCount:    0,
 		LookCount:    0,
