@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"xiaolong_blog/internal/routers"
@@ -36,7 +37,11 @@ func init() {
 func main() {
 	gin.SetMode(global.ServerSetting.RunMode)
 	router := routers.NewRouter()
-	router.Run(":" + global.ServerSetting.HttpPort)
+	err := router.Run(":" + global.ServerSetting.HttpPort)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 }
 
